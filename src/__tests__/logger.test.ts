@@ -540,13 +540,13 @@ describe('AuditLogger', () => {
 
       // First logger session
       const logger1 = new AuditLogger({ storagePath, hmacSecret: secret });
-      const e1 = await logger1.log(makeInput());
-      const e2 = await logger1.log(makeInput());
+      await logger1.log(makeInput());
+      await logger1.log(makeInput());
       await logger1.close();
 
       // Second logger session
       const logger2 = new AuditLogger({ storagePath, hmacSecret: secret });
-      const e3 = await logger2.log(makeInput());
+      await logger2.log(makeInput());
 
       // Verify the complete chain
       const result = await logger2.verify();
