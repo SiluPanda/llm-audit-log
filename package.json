@@ -1,6 +1,6 @@
 {
   "name": "llm-audit-log",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Tamper-evident compliance-ready audit logging for LLM I/O",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
