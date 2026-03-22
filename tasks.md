@@ -6,12 +6,12 @@ This document tracks all implementation tasks derived from SPEC.md. Each task is
 
 ## Phase 0: Project Scaffolding and Setup
 
-- [ ] **Install dev dependencies** -- Add `typescript@^5.5.0`, `vitest@^2.0.0`, and `eslint@^9.0.0` as devDependencies in package.json. | Status: not_done
+- [x] **Install dev dependencies** -- Add `typescript@^5.5.0`, `vitest@^2.0.0`, and `eslint@^9.0.0` as devDependencies in package.json. | Status: done
 - [ ] **Configure optional peer dependencies** -- Add `better-sqlite3@^11.0.0`, `openai`, and `@anthropic-ai/sdk` as optional peerDependencies in package.json with `peerDependenciesMeta` marking each as optional. | Status: not_done
 - [ ] **Add CLI bin entry** -- Add a `"bin": { "llm-audit-log": "./dist/cli/index.js" }` field to package.json so the CLI is available via npx. | Status: not_done
 - [ ] **Create directory structure** -- Create all directories: `src/storage/`, `src/instrument/`, `src/cli/`, `src/__tests__/`. | Status: not_done
-- [ ] **Configure vitest** -- Add or update vitest config (vitest.config.ts or in package.json) for the test runner. | Status: not_done
-- [ ] **Configure eslint** -- Add ESLint configuration appropriate for TypeScript. | Status: not_done
+- [x] **Configure vitest** -- Add or update vitest config (vitest.config.ts or in package.json) for the test runner. | Status: done
+- [x] **Configure eslint** -- Add ESLint configuration appropriate for TypeScript. | Status: done
 
 ---
 
@@ -19,29 +19,29 @@ This document tracks all implementation tasks derived from SPEC.md. Each task is
 
 ### 1.1 Types (`src/types.ts`)
 
-- [ ] **Define AuditEntry interface** -- Define the full `AuditEntry` interface with all fields: id, v, timestamp, actor, model, provider, input, output, tokens, latencyMs, cost, toolCalls, error, metadata, piiFields, hmac, hmacSeed, tombstone, deletedEntryIds, deletionReason. | Status: not_done
-- [ ] **Define AuditLogOptions interface** -- Define the configuration interface with storage, integrity, redaction, piiEncryption, defaultPiiFields, retention, buffer, maxFieldSize, pricing, and onError fields. | Status: not_done
+- [x] **Define AuditEntry interface** -- Define the full `AuditEntry` interface with all fields: id, v, timestamp, actor, model, provider, input, output, tokens, latencyMs, cost, toolCalls, error, metadata, piiFields, hmac, hmacSeed, tombstone, deletedEntryIds, deletionReason. | Status: done
+- [x] **Define AuditLogOptions interface** -- Define the configuration interface with storage, integrity, redaction, piiEncryption, defaultPiiFields, retention, buffer, maxFieldSize, pricing, and onError fields. | Status: done
 - [ ] **Define IntegrityConfig interface** -- Define with algorithm (sha256/sha384/sha512), secret (string | Buffer), and optional seed fields. | Status: not_done
 - [ ] **Define RedactionConfig interface** -- Define with patterns (RegExp[]), paths (string[]), custom function, and placeholder string fields. | Status: not_done
 - [ ] **Define PiiEncryptionConfig interface** -- Define with key (Buffer, must be 32 bytes) field. | Status: not_done
-- [ ] **Define RetentionPolicy interface** -- Define with maxAge, checkIntervalMs, archiveBeforePurge, and archiveDir fields. | Status: not_done
+- [x] **Define RetentionPolicy interface** -- Define with maxAge, checkIntervalMs, archiveBeforePurge, and archiveDir fields. | Status: done
 - [ ] **Define BufferConfig interface** -- Define with maxEntries, flushIntervalMs, and immediate fields. | Status: not_done
-- [ ] **Define RecordInput interface** -- Define the partial entry type accepted by log.record(), with optional actor, required model/provider/input/output/tokens/latencyMs, and optional cost/toolCalls/error/metadata/piiFields. | Status: not_done
-- [ ] **Define QueryFilters interface** -- Define with from, to, actor, model, provider, minTokens, minCost, errorsOnly, withToolCalls, excludeTombstones, search, metadata, limit, offset, order fields. | Status: not_done
-- [ ] **Define VerifyOptions and VerificationResult interfaces** -- VerifyOptions with optional `last` number; VerificationResult with valid, entryCount, totalEntries, firstInvalidIndex, expectedHmac, actualHmac, invalidEntryId, durationMs, error fields. | Status: not_done
-- [ ] **Define ExportFormat type and ExportOptions interface** -- ExportFormat as 'json' | 'csv'; ExportOptions with filters, includePii, columns, and subjectAccessRequest fields. | Status: not_done
+- [x] **Define RecordInput interface** -- Define the partial entry type accepted by log.record(), with optional actor, required model/provider/input/output/tokens/latencyMs, and optional cost/toolCalls/error/metadata/piiFields. | Status: done
+- [x] **Define QueryFilters interface** -- Define with from, to, actor, model, provider, minTokens, minCost, errorsOnly, withToolCalls, excludeTombstones, search, metadata, limit, offset, order fields. | Status: done
+- [x] **Define VerifyOptions and VerificationResult interfaces** -- VerifyOptions with optional `last` number; VerificationResult with valid, entryCount, totalEntries, firstInvalidIndex, expectedHmac, actualHmac, invalidEntryId, durationMs, error fields. | Status: done
+- [x] **Define ExportFormat type and ExportOptions interface** -- ExportFormat as 'json' | 'csv'; ExportOptions with filters, includePii, columns, and subjectAccessRequest fields. | Status: done
 - [ ] **Define EraseOptions interface** -- Define with actor, reason, and optional overwritePii fields. | Status: not_done
 - [ ] **Define AuditStats interface** -- Define with totalEntries, activeEntries, tombstoneEntries, oldestEntry, newestEntry, storageSizeBytes, byProvider, byModel, distinctActors, totalTokens, totalCost, integrityStatus fields. | Status: not_done
 - [ ] **Define InstrumentOptions interface** -- Define with actor, metadata, piiFields, and captureContent fields. | Status: not_done
-- [ ] **Define StorageBackend interface** -- Define with init(), write(entries), query(filters), count(filters), delete(filters), close() methods. | Status: not_done
+- [x] **Define StorageBackend interface** -- Define with init(), write(entries), query(filters), count(filters), delete(filters), close() methods. | Status: done
 - [ ] **Define JsonlBackendConfig interface** -- Define with type 'jsonl', path, mode, maxFileSize, maxFiles, compress fields. | Status: not_done
 - [ ] **Define SqliteBackendConfig interface** -- Define with type 'sqlite', path, walMode, fullTextSearch fields. | Status: not_done
 - [ ] **Define AuditLog interface** -- Define the public API surface: record(), instrument(), query(), verify(), export(), purge(), erase(), stats(), flush(), close(), active, entryCount properties. | Status: not_done
 
 ### 1.2 Canonical JSON (`src/canonical-json.ts`)
 
-- [ ] **Implement canonicalJSON function** -- Serialize a JavaScript object to JSON with keys sorted alphabetically at every nesting level. Must handle nested objects, arrays, null, undefined, numbers, strings, and booleans deterministically. | Status: not_done
-- [ ] **Test canonical JSON determinism** -- Write tests verifying that different key insertion orders produce identical JSON output. Test with nested objects, arrays, and edge cases (null, empty objects, special characters). | Status: not_done
+- [x] **Implement canonicalJSON function** -- Serialize a JavaScript object to JSON with keys sorted alphabetically at every nesting level. Must handle nested objects, arrays, null, undefined, numbers, strings, and booleans deterministically. | Status: done
+- [x] **Test canonical JSON determinism** -- Write tests verifying that different key insertion orders produce identical JSON output. Test with nested objects, arrays, and edge cases (null, empty objects, special characters). | Status: done
 
 ### 1.3 Pricing (`src/pricing.ts`)
 
@@ -77,22 +77,22 @@ This document tracks all implementation tasks derived from SPEC.md. Each task is
 
 ### 3.1 JSONL Backend (`src/storage/jsonl.ts`)
 
-- [ ] **Implement JSONL init()** -- Create the file if it does not exist with mode 0o600 (or configured mode). Build a lightweight in-memory timestamp index by scanning existing entries on init. | Status: not_done
-- [ ] **Implement JSONL write()** -- Append entries as one JSON object per line (terminated by \n) using fs.appendFile with the 'a' flag. | Status: not_done
-- [ ] **Implement JSONL query()** -- Scan the file line by line, parse each JSON line, evaluate QueryFilters (from, to, actor, model, provider, minTokens, minCost, errorsOnly, withToolCalls, excludeTombstones, metadata, limit, offset, order). Return an AsyncIterable<AuditEntry>. | Status: not_done
-- [ ] **Implement JSONL count()** -- Scan and count entries matching the given filters. | Status: not_done
-- [ ] **Implement JSONL delete()** -- Rewrite the file excluding entries matching the given filters. Return the count of deleted entries. | Status: not_done
-- [ ] **Implement JSONL close()** -- Release any open file handles. | Status: not_done
-- [ ] **Implement file rotation** -- When the active log file exceeds maxFileSize (default 50 MiB), rename it with a numeric suffix (audit.jsonl.1, audit.jsonl.2, etc.), create a new active file. Respect maxFiles limit and optionally compress rotated files with gzip. | Status: not_done
-- [ ] **Implement file permissions** -- New files are created with mode 0o600 by default (configurable). | Status: not_done
-- [ ] **Test JSONL write and read round-trip** -- Write entries, read them back via query, verify contents match. Use temp files. | Status: not_done
-- [ ] **Test JSONL query filters** -- Test filtering by actor, date range, model, provider, errorsOnly, minCost, minTokens, withToolCalls, limit, offset, order, excludeTombstones, and metadata. | Status: not_done
-- [ ] **Test JSONL file rotation** -- Configure a small maxFileSize, write enough data to trigger rotation, verify rotated files exist and active file is new. | Status: not_done
-- [ ] **Test JSONL delete and rewrite** -- Write entries, delete some via filters, verify remaining entries are correct and file is rewritten. | Status: not_done
+- [x] **Implement JSONL init()** -- Create the file if it does not exist with mode 0o600 (or configured mode). Build a lightweight in-memory timestamp index by scanning existing entries on init. | Status: done
+- [x] **Implement JSONL write()** -- Append entries as one JSON object per line (terminated by \n) using fs.appendFile with the 'a' flag. | Status: done
+- [x] **Implement JSONL query()** -- Scan the file line by line, parse each JSON line, evaluate QueryFilters (from, to, actor, model, provider, minTokens, minCost, errorsOnly, withToolCalls, excludeTombstones, metadata, limit, offset, order). Return an AsyncIterable<AuditEntry>. | Status: done
+- [x] **Implement JSONL count()** -- Scan and count entries matching the given filters. | Status: done
+- [x] **Implement JSONL delete()** -- Rewrite the file excluding entries matching the given filters. Return the count of deleted entries. | Status: done
+- [x] **Implement JSONL close()** -- Release any open file handles. | Status: done
+- [x] **Implement file rotation** -- When the active log file exceeds maxFileSize (default 50 MiB), rename it with a numeric suffix (audit.jsonl.1, audit.jsonl.2, etc.), create a new active file. Respect maxFiles limit and optionally compress rotated files with gzip. | Status: done
+- [x] **Implement file permissions** -- New files are created with mode 0o600 by default (configurable). | Status: done
+- [x] **Test JSONL write and read round-trip** -- Write entries, read them back via query, verify contents match. Use temp files. | Status: done
+- [x] **Test JSONL query filters** -- Test filtering by actor, date range, model, provider, errorsOnly, minCost, minTokens, withToolCalls, limit, offset, order, excludeTombstones, and metadata. | Status: done
+- [x] **Test JSONL file rotation** -- Configure a small maxFileSize, write enough data to trigger rotation, verify rotated files exist and active file is new. | Status: done
+- [x] **Test JSONL delete and rewrite** -- Write entries, delete some via filters, verify remaining entries are correct and file is rewritten. | Status: done
 
 ### 3.2 Storage Index (`src/storage/index.ts`)
 
-- [ ] **Export StorageBackend interface** -- Re-export the StorageBackend interface from the storage module for use by custom backends. | Status: not_done
+- [x] **Export StorageBackend interface** -- Re-export the StorageBackend interface from the storage module for use by custom backends. | Status: done
 
 ---
 
@@ -100,30 +100,30 @@ This document tracks all implementation tasks derived from SPEC.md. Each task is
 
 ### 4.1 AuditLog Class (`src/audit-log.ts`)
 
-- [ ] **Implement createAuditLog() factory** -- Accept AuditLogOptions, validate configuration (throw TypeError for invalid configs), apply defaults, instantiate the storage backend, entry builder, buffer, and return an AuditLog instance. | Status: not_done
+- [x] **Implement createAuditLog() factory** -- Accept AuditLogOptions, validate configuration (throw TypeError for invalid configs), apply defaults, instantiate the storage backend, entry builder, buffer, and return an AuditLog instance. | Status: done
 - [ ] **Implement configuration validation** -- Validate all rules from the spec: non-empty storage path, custom backend implements StorageBackend, integrity secret required when integrity enabled, PII encryption key must be 32 bytes, retention maxAge > 0, buffer maxEntries >= 1, buffer flushIntervalMs > 0, maxFieldSize >= 0. Throw synchronous TypeError on invalid config. | Status: not_done
 - [ ] **Implement environment variable overrides** -- Read LLM_AUDIT_HMAC_SECRET, LLM_AUDIT_STORAGE_PATH, LLM_AUDIT_RETENTION_DAYS, LLM_AUDIT_BUFFER_IMMEDIATE, LLM_AUDIT_DISABLED. Environment variables override corresponding options. | Status: not_done
 - [ ] **Implement no-op mode** -- When LLM_AUDIT_DISABLED=true, createAuditLog returns a no-op instance where all methods are stubs that do nothing. | Status: not_done
-- [ ] **Implement record() method** -- Accept RecordInput, build the complete AuditEntry via entry builder (UUID, timestamp, cost estimation, defaults), apply PII redaction if configured, apply PII encryption if configured, compute HMAC if integrity configured, push to buffer. Return the complete AuditEntry. | Status: not_done
-- [ ] **Implement query() method** -- Delegate to the storage backend's query() with the provided QueryFilters. Return AsyncIterable<AuditEntry>. Decrypt PII fields if PII encryption is configured. | Status: not_done
+- [x] **Implement record() method** -- Accept RecordInput, build the complete AuditEntry via entry builder (UUID, timestamp, cost estimation, defaults), apply PII redaction if configured, apply PII encryption if configured, compute HMAC if integrity configured, push to buffer. Return the complete AuditEntry. | Status: done
+- [x] **Implement query() method** -- Delegate to the storage backend's query() with the provided QueryFilters. Return AsyncIterable<AuditEntry>. Decrypt PII fields if PII encryption is configured. | Status: done
 - [ ] **Implement flush() method** -- Delegate to buffer's flush(). | Status: not_done
-- [ ] **Implement close() method** -- Flush buffer, stop retention timer, close storage backend. Set active to false. | Status: not_done
-- [ ] **Implement active property** -- Track whether the audit log is open (not closed). | Status: not_done
-- [ ] **Implement entryCount property** -- Track total entries written since creation. | Status: not_done
-- [ ] **Test createAuditLog with default options** -- Verify JSONL backend is used, default path, default buffer settings. | Status: not_done
+- [x] **Implement close() method** -- Flush buffer, stop retention timer, close storage backend. Set active to false. | Status: done
+- [x] **Implement active property** -- Track whether the audit log is open (not closed). | Status: done
+- [x] **Implement entryCount property** -- Track total entries written since creation. | Status: done
+- [x] **Test createAuditLog with default options** -- Verify JSONL backend is used, default path, default buffer settings. | Status: done
 - [ ] **Test configuration validation errors** -- Test each validation rule throws TypeError with appropriate message. | Status: not_done
 - [ ] **Test environment variable overrides** -- Set env vars, verify they override passed options. | Status: not_done
 - [ ] **Test no-op mode** -- Set LLM_AUDIT_DISABLED=true, verify record/query/verify/export are no-ops. | Status: not_done
-- [ ] **Test record() produces correct entry** -- Record an entry, verify all fields are correctly populated (UUID, timestamp, tokens.total, defaults). | Status: not_done
+- [x] **Test record() produces correct entry** -- Record an entry, verify all fields are correctly populated (UUID, timestamp, tokens.total, defaults). | Status: done
 - [ ] **Test record() with cost estimation** -- Record entry with known model, verify cost is computed. Record with unknown model, verify cost is null. | Status: not_done
-- [ ] **Test query() round-trip** -- Record entries, query them back, verify correct results. | Status: not_done
-- [ ] **Test close() flushes and prevents further writes** -- Close the log, verify buffer is flushed and subsequent calls throw or return gracefully. | Status: not_done
+- [x] **Test query() round-trip** -- Record entries, query them back, verify correct results. | Status: done
+- [x] **Test close() flushes and prevents further writes** -- Close the log, verify buffer is flushed and subsequent calls throw or return gracefully. | Status: done
 
 ### 4.2 Public API Re-exports (`src/index.ts`)
 
-- [ ] **Export createAuditLog** -- Re-export the factory function from audit-log.ts. | Status: not_done
+- [x] **Export createAuditLog** -- Re-export the factory function from audit-log.ts. | Status: done
 - [ ] **Export setActorContext and getActorContext** -- Re-export from context.ts. | Status: not_done
-- [ ] **Export all public types** -- Re-export AuditEntry, AuditLogOptions, RecordInput, QueryFilters, VerificationResult, ExportFormat, ExportOptions, AuditStats, InstrumentOptions, StorageBackend, etc. from types.ts. | Status: not_done
+- [x] **Export all public types** -- Re-export AuditEntry, AuditLogOptions, RecordInput, QueryFilters, VerificationResult, ExportFormat, ExportOptions, AuditStats, InstrumentOptions, StorageBackend, etc. from types.ts. | Status: done
 
 ---
 
@@ -131,27 +131,27 @@ This document tracks all implementation tasks derived from SPEC.md. Each task is
 
 ### 5.1 Integrity Module (`src/integrity.ts`)
 
-- [ ] **Implement HMAC computation for first entry** -- Compute HMAC-SHA256(secret, seed + canonicalJSON(entry without hmac/hmacSeed fields)). Store seed in entry's hmacSeed field. Generate a random 32-byte hex seed if not configured. | Status: not_done
-- [ ] **Implement HMAC computation for subsequent entries** -- Compute HMAC-SHA256(secret, previousHmac + canonicalJSON(entry without hmac field)). | Status: not_done
+- [x] **Implement HMAC computation for first entry** -- Compute HMAC-SHA256(secret, seed + canonicalJSON(entry without hmac/hmacSeed fields)). Store seed in entry's hmacSeed field. Generate a random 32-byte hex seed if not configured. | Status: done
+- [x] **Implement HMAC computation for subsequent entries** -- Compute HMAC-SHA256(secret, previousHmac + canonicalJSON(entry without hmac field)). | Status: done
 - [ ] **Support configurable algorithms** -- Support sha256, sha384, sha512 as the HMAC algorithm. | Status: not_done
-- [ ] **Implement chain verification** -- Walk all entries from first to last, recompute each HMAC, compare to stored value. Return VerificationResult with valid, entryCount, totalEntries, firstInvalidIndex, expectedHmac, actualHmac, invalidEntryId, durationMs. | Status: not_done
+- [x] **Implement chain verification** -- Walk all entries from first to last, recompute each HMAC, compare to stored value. Return VerificationResult with valid, entryCount, totalEntries, firstInvalidIndex, expectedHmac, actualHmac, invalidEntryId, durationMs. | Status: done
 - [ ] **Implement partial verification** -- When VerifyOptions.last is provided, verify only the last N entries. | Status: not_done
-- [ ] **Track previous HMAC state** -- Maintain the last HMAC in memory for computing the next entry's HMAC without re-reading storage. Handle chain continuation after reopening a log (read last entry's HMAC from storage on init). | Status: not_done
-- [ ] **Test first entry HMAC** -- Verify first entry includes hmacSeed and correct HMAC value. | Status: not_done
-- [ ] **Test chain continuation** -- Verify second entry's HMAC uses first entry's HMAC as input. | Status: not_done
-- [ ] **Test valid chain verification** -- Create 100-entry chain, verify returns { valid: true, entryCount: 100 }. | Status: not_done
-- [ ] **Test modification detection** -- Modify an entry in the middle, verify returns { valid: false } with correct firstInvalidIndex. | Status: not_done
-- [ ] **Test insertion detection** -- Insert an entry in the middle, verify the chain breaks. | Status: not_done
-- [ ] **Test deletion detection** -- Delete an entry from the middle, verify the chain breaks. | Status: not_done
+- [x] **Track previous HMAC state** -- Maintain the last HMAC in memory for computing the next entry's HMAC without re-reading storage. Handle chain continuation after reopening a log (read last entry's HMAC from storage on init). | Status: done
+- [x] **Test first entry HMAC** -- Verify first entry includes hmacSeed and correct HMAC value. | Status: done
+- [x] **Test chain continuation** -- Verify second entry's HMAC uses first entry's HMAC as input. | Status: done
+- [x] **Test valid chain verification** -- Create 100-entry chain, verify returns { valid: true, entryCount: 100 }. | Status: done
+- [x] **Test modification detection** -- Modify an entry in the middle, verify returns { valid: false } with correct firstInvalidIndex. | Status: done
+- [x] **Test insertion detection** -- Insert an entry in the middle, verify the chain breaks. | Status: done
+- [x] **Test deletion detection** -- Delete an entry from the middle, verify the chain breaks. | Status: done
 - [ ] **Test different algorithms** -- Verify sha256, sha384, sha512 each produce valid chains with different hash lengths. | Status: not_done
-- [ ] **Test canonical JSON determinism in HMAC** -- Verify that entry objects with different key orders produce the same HMAC. | Status: not_done
+- [x] **Test canonical JSON determinism in HMAC** -- Verify that entry objects with different key orders produce the same HMAC. | Status: done
 - [ ] **Test partial verification** -- Create a long chain, verify only last N entries, confirm results. | Status: not_done
 
 ### 5.2 Integrate Integrity into AuditLog
 
-- [ ] **Wire integrity into record() write path** -- After building the entry and applying redaction/encryption, compute the HMAC and attach it to the entry before buffering. | Status: not_done
-- [ ] **Implement log.verify() method** -- Delegate to the integrity module's verification function, passing the storage backend's query for sequential reads. | Status: not_done
-- [ ] **Initialize chain state on log open** -- On createAuditLog, if integrity is configured and the storage has existing entries, read the last entry to get the previous HMAC for chain continuation. | Status: not_done
+- [x] **Wire integrity into record() write path** -- After building the entry and applying redaction/encryption, compute the HMAC and attach it to the entry before buffering. | Status: done
+- [x] **Implement log.verify() method** -- Delegate to the integrity module's verification function, passing the storage backend's query for sequential reads. | Status: done
+- [x] **Initialize chain state on log open** -- On createAuditLog, if integrity is configured and the storage has existing entries, read the last entry to get the previous HMAC for chain continuation. | Status: done
 
 ---
 
@@ -159,19 +159,19 @@ This document tracks all implementation tasks derived from SPEC.md. Each task is
 
 ### 6.1 PII Redaction (`src/redaction.ts`)
 
-- [ ] **Implement pattern-based redaction** -- Apply configured regex patterns to all string field values in the entry (input, output, metadata values). Replace matches with the placeholder string (default '[REDACTED]'). | Status: not_done
-- [ ] **Implement path-based redaction** -- For configured field paths (e.g., 'input', 'metadata.customerEmail'), replace the entire field value with the placeholder string. Use dot notation for nested paths. | Status: not_done
+- [x] **Implement pattern-based redaction** -- Apply configured regex patterns to all string field values in the entry (input, output, metadata values). Replace matches with the placeholder string (default '[REDACTED]'). | Status: done
+- [x] **Implement path-based redaction** -- For configured field paths (e.g., 'input', 'metadata.customerEmail'), replace the entire field value with the placeholder string. Use dot notation for nested paths. | Status: done
 - [ ] **Implement custom redaction function** -- Call the custom redactor function for every string field, passing the field path and value, using the returned value. | Status: not_done
-- [ ] **Ensure redaction occurs before HMAC and storage** -- Redaction must be applied in-memory before HMAC computation and before writing to storage. | Status: not_done
-- [ ] **Test email pattern redaction** -- Verify email addresses in input/output are replaced with [REDACTED]. | Status: not_done
-- [ ] **Test SSN pattern redaction** -- Verify US SSN patterns (xxx-xx-xxxx) are replaced. | Status: not_done
-- [ ] **Test phone number pattern redaction** -- Verify US phone number patterns are replaced. | Status: not_done
-- [ ] **Test credit card pattern redaction** -- Verify credit card number patterns are replaced. | Status: not_done
-- [ ] **Test path-based redaction of entire input field** -- Configure path 'input', verify the whole input is replaced. | Status: not_done
-- [ ] **Test path-based redaction of nested metadata field** -- Configure path 'metadata.customerEmail', verify only that field is replaced. | Status: not_done
+- [x] **Ensure redaction occurs before HMAC and storage** -- Redaction must be applied in-memory before HMAC computation and before writing to storage. | Status: done
+- [x] **Test email pattern redaction** -- Verify email addresses in input/output are replaced with [REDACTED]. | Status: done
+- [x] **Test SSN pattern redaction** -- Verify US SSN patterns (xxx-xx-xxxx) are replaced. | Status: done
+- [x] **Test phone number pattern redaction** -- Verify US phone number patterns are replaced. | Status: done
+- [x] **Test credit card pattern redaction** -- Verify credit card number patterns are replaced. | Status: done
+- [x] **Test path-based redaction of entire input field** -- Configure path 'input', verify the whole input is replaced. | Status: done
+- [x] **Test path-based redaction of nested metadata field** -- Configure path 'metadata.customerEmail', verify only that field is replaced. | Status: done
 - [ ] **Test custom redactor function** -- Provide a custom function, verify it is called for string fields and its return value is used. | Status: not_done
-- [ ] **Test custom placeholder** -- Configure a custom placeholder string, verify it is used instead of '[REDACTED]'. | Status: not_done
-- [ ] **Test redaction with no config** -- Verify no redaction occurs when redaction is not configured. | Status: not_done
+- [x] **Test custom placeholder** -- Configure a custom placeholder string, verify it is used instead of '[REDACTED]'. | Status: done
+- [x] **Test redaction with no config** -- Verify no redaction occurs when redaction is not configured. | Status: done
 
 ### 6.2 PII Encryption (`src/encryption.ts`)
 
@@ -184,8 +184,8 @@ This document tracks all implementation tasks derived from SPEC.md. Each task is
 
 ### 6.3 PII Field Tagging
 
-- [ ] **Implement default PII field merging** -- Merge defaultPiiFields (['input', 'output'] by default) with per-entry piiFields. Remove duplicates. | Status: not_done
-- [ ] **Test PII field merging** -- Verify defaultPiiFields are present on every entry, and per-entry piiFields are merged with no duplicates. | Status: not_done
+- [x] **Implement default PII field merging** -- Merge defaultPiiFields (['input', 'output'] by default) with per-entry piiFields. Remove duplicates. | Status: done
+- [x] **Test PII field merging** -- Verify defaultPiiFields are present on every entry, and per-entry piiFields are merged with no duplicates. | Status: done
 
 ### 6.4 PII-Aware Export
 
@@ -279,22 +279,22 @@ This document tracks all implementation tasks derived from SPEC.md. Each task is
 
 ### 9.1 Export (`src/export.ts`)
 
-- [ ] **Implement JSON export** -- Produce a JSON string containing an array of AuditEntry objects matching the given filters. Support includePii option. Support subjectAccessRequest option (filter by actor). | Status: not_done
-- [ ] **Implement CSV export** -- Produce a CSV string with header row. Flatten complex fields (input, output, toolCalls, metadata) as JSON-serialized strings within cells. Support column selection. Support includePii option. | Status: not_done
+- [x] **Implement JSON export** -- Produce a JSON string containing an array of AuditEntry objects matching the given filters. Support includePii option. Support subjectAccessRequest option (filter by actor). | Status: done
+- [x] **Implement CSV export** -- Produce a CSV string with header row. Flatten complex fields (input, output, toolCalls, metadata) as JSON-serialized strings within cells. Support column selection. Support includePii option. | Status: done
 - [ ] **Implement GDPR Subject Access Request export** -- When subjectAccessRequest.actor is provided, export all entries for that actor with full PII (if includePii: true) or excluded PII (if false). | Status: not_done
-- [ ] **Test JSON export produces valid JSON** -- Export entries, parse the result, verify it matches the expected entries. | Status: not_done
-- [ ] **Test CSV export produces valid CSV with correct headers** -- Export with column selection, verify header row and data rows are correct. | Status: not_done
+- [x] **Test JSON export produces valid JSON** -- Export entries, parse the result, verify it matches the expected entries. | Status: done
+- [x] **Test CSV export produces valid CSV with correct headers** -- Export with column selection, verify header row and data rows are correct. | Status: done
 - [ ] **Test PII exclusion in export** -- Export with includePii: false, verify PII fields are replaced with '[PII_EXCLUDED]'. | Status: not_done
 - [ ] **Test Subject Access Request export** -- Export for a specific actor, verify only that actor's entries are included. | Status: not_done
 
 ### 9.2 Retention (`src/retention.ts`)
 
-- [ ] **Implement retention policy enforcement** -- On startup, run an initial purge check. Start a periodic timer (setInterval with unref()) at checkIntervalMs intervals. Each check identifies entries with timestamp older than now - maxAge. | Status: not_done
+- [x] **Implement retention policy enforcement** -- On startup, run an initial purge check. Start a periodic timer (setInterval with unref()) at checkIntervalMs intervals. Each check identifies entries with timestamp older than now - maxAge. | Status: done
 - [ ] **Implement archive-before-purge** -- When archiveBeforePurge is true, export matching entries to a JSON file in archiveDir (named 'archive-{from}-{to}.json') before deleting them. | Status: not_done
 - [ ] **Implement chain gap record for JSONL purge** -- When entries are purged from JSONL backend, write a chain gap record documenting the purge event (since the HMAC chain is not recomputed). | Status: not_done
 - [ ] **Test auto-purge with short maxAge** -- Configure 1-second maxAge, write entries, wait, verify old entries are purged. | Status: not_done
 - [ ] **Test archive-before-purge** -- Verify archive file is created with correct entries before deletion occurs. | Status: not_done
-- [ ] **Test manual purge** -- Call log.purge(date), verify entries before the date are deleted, return count is correct. | Status: not_done
+- [x] **Test manual purge** -- Call log.purge(date), verify entries before the date are deleted, return count is correct. | Status: done
 
 ### 9.3 Stats (`log.stats()`)
 
@@ -304,10 +304,10 @@ This document tracks all implementation tasks derived from SPEC.md. Each task is
 
 ### 9.4 Integrate into AuditLog
 
-- [ ] **Wire log.export() into AuditLog class** -- Delegate to export.ts formatters with the storage backend's query. | Status: not_done
-- [ ] **Wire log.purge() into AuditLog class** -- Implement manual purge delegating to storage backend's delete. | Status: not_done
+- [x] **Wire log.export() into AuditLog class** -- Delegate to export.ts formatters with the storage backend's query. | Status: done
+- [x] **Wire log.purge() into AuditLog class** -- Implement manual purge delegating to storage backend's delete. | Status: done
 - [ ] **Wire log.stats() into AuditLog class** -- Aggregate stats from storage backend. | Status: not_done
-- [ ] **Wire retention auto-purge into AuditLog lifecycle** -- Start retention timer on init, stop on close. | Status: not_done
+- [x] **Wire retention auto-purge into AuditLog lifecycle** -- Start retention timer on init, stop on close. | Status: done
 
 ---
 
@@ -349,17 +349,17 @@ This document tracks all implementation tasks derived from SPEC.md. Each task is
 
 ## Phase 11: Integration Tests
 
-- [ ] **End-to-end JSONL recording test** -- Create audit log with JSONL storage, write 10 entries, close, reopen, verify all 10 are queryable and HMAC chain is intact. | Status: not_done
+- [x] **End-to-end JSONL recording test** -- Create audit log with JSONL storage, write 10 entries, close, reopen, verify all 10 are queryable and HMAC chain is intact. | Status: done
 - [ ] **End-to-end SQLite recording test** -- Create audit log with SQLite storage, write 10 entries, query by actor/model/date range, verify correct results and HMAC chain. | Status: not_done
 - [ ] **End-to-end OpenAI instrumentation test** -- Instrument a mock OpenAI client, execute chat completion, verify audit entry has correct model, provider, input, output, tokens, latency. | Status: not_done
 - [ ] **End-to-end OpenAI streaming instrumentation test** -- Instrument a mock OpenAI client for streaming, verify audit entry captures full streamed output and correct latency. | Status: not_done
 - [ ] **End-to-end Anthropic instrumentation test** -- Same as OpenAI tests, adapted for Anthropic SDK API surface. | Status: not_done
 - [ ] **End-to-end actor context test** -- setActorContext('user:alice', fn) where fn makes an instrumented call. Verify entry has actor 'user:alice'. Test nested async operations. Test concurrent requests with different actors. | Status: not_done
 - [ ] **End-to-end GDPR erasure test** -- Write entries for multiple actors. Erase one. Verify queries exclude erased actor. Verify exports exclude erased actor. Verify chain is intact. Verify stats show correct counts. | Status: not_done
-- [ ] **End-to-end PII redaction test** -- Configure redaction patterns, record entries with PII, verify stored entries have redacted values. | Status: not_done
+- [x] **End-to-end PII redaction test** -- Configure redaction patterns, record entries with PII, verify stored entries have redacted values. | Status: done
 - [ ] **End-to-end PII encryption test** -- Configure PII encryption, record entries, verify PII fields are encrypted at rest, decrypted on query. | Status: not_done
 - [ ] **End-to-end retention test** -- Configure short retention, write entries, verify auto-purge removes old entries. | Status: not_done
-- [ ] **End-to-end export test** -- Write entries, export as JSON and CSV with various filter/PII options, verify output correctness. | Status: not_done
+- [x] **End-to-end export test** -- Write entries, export as JSON and CSV with various filter/PII options, verify output correctness. | Status: done
 
 ---
 
