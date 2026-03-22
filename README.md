@@ -3,6 +3,7 @@
 Tamper-evident, compliance-ready audit logging for LLM input/output.
 
 [![npm version](https://img.shields.io/npm/v/llm-audit-log.svg)](https://www.npmjs.com/package/llm-audit-log)
+[![npm downloads](https://img.shields.io/npm/dt/llm-audit-log.svg)](https://www.npmjs.com/package/llm-audit-log)
 [![license](https://img.shields.io/npm/l/llm-audit-log.svg)](https://github.com/SiluPanda/llm-audit-log/blob/master/LICENSE)
 [![node](https://img.shields.io/node/v/llm-audit-log.svg)](https://nodejs.org)
 
