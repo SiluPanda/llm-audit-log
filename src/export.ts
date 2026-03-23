@@ -49,7 +49,7 @@ export function toCsv(entries: AuditEntry[]): string {
     'latencyMs', 'cost',
     'toolCalls', 'error',
     'metadata', 'piiFields',
-    'hmac', 'tombstone',
+    'hmac', 'tombstone', 'deletedEntryIds', 'deletionReason',
   ];
 
   const rows = [headers.join(',')];
@@ -75,6 +75,8 @@ export function toCsv(entries: AuditEntry[]): string {
       csvEscape(JSON.stringify(entry.piiFields)),
       csvEscape(entry.hmac ?? ''),
       entry.tombstone ? 'true' : 'false',
+      csvEscape(entry.deletedEntryIds ? JSON.stringify(entry.deletedEntryIds) : ''),
+      csvEscape(entry.deletionReason ?? ''),
     ];
     rows.push(row.join(','));
   }
