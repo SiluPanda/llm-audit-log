@@ -235,7 +235,9 @@ export class AuditLogger {
    */
   async purge(before: Date): Promise<number> {
     await this.ensureInitialized();
-    return this.backend.purge(before);
+    const purged = await this.backend.purge(before);
+    this._entryCount = Math.max(0, this._entryCount - purged);
+    return purged;
   }
 
   /**

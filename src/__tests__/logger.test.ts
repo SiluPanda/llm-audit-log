@@ -515,6 +515,37 @@ describe('AuditLogger', () => {
 
       await logger2.close();
     });
+
+    it('should update entryCount after purge', async () => {
+      const logger = new AuditLogger({ storagePath });
+
+      // Log 3 entries — they all get "now" timestamps so we write manually
+      await logger.close();
+
+      const lines = [
+        JSON.stringify(makeEntry('2025-01-01T00:00:00.000Z', 'old-1')),
+        JSON.stringify(makeEntry('2025-06-01T00:00:00.000Z', 'old-2')),
+        JSON.stringify(makeEntry('2026-06-01T00:00:00.000Z', 'new-1')),
+      ].join('\n') + '\n';
+      fs.writeFileSync(storagePath, lines);
+
+      const logger2 = new AuditLogger({ storagePath });
+
+      // Log one entry to increment entryCount
+      await logger2.log(makeInput());
+      const countBefore = logger2.entryCount;
+      expect(countBefore).toBe(1);
+
+      // Purge the 2 old entries
+      const purged = await logger2.purge(new Date('2026-01-01'));
+      expect(purged).toBe(2);
+
+      // entryCount must decrease after purge (bug: was stale before fix)
+      expect(logger2.entryCount).toBeLessThan(countBefore);
+      expect(logger2.entryCount).toBe(Math.max(0, countBefore - purged));
+
+      await logger2.close();
+    });
   });
 
   describe('close', () => {

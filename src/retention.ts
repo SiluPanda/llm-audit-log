@@ -30,7 +30,7 @@ export class RetentionManager {
 
     // Schedule periodic purge
     this.timer = setInterval(() => {
-      void this.runPurge();
+      this.runPurge().catch(() => { /* handled by backend */ });
     }, this.checkIntervalMs);
 
     // Don't block process exit

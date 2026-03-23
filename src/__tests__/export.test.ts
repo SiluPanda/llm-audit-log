@@ -176,4 +176,23 @@ describe('toCsv', () => {
     // Should be JSON-stringified
     expect(result).toContain('role');
   });
+
+  it('should include deletedEntryIds and deletionReason in CSV', () => {
+    const entries = [makeEntry({
+      tombstone: true,
+      deletedEntryIds: ['id1', 'id2'],
+      deletionReason: 'compliance',
+    })];
+    const csv = toCsv(entries);
+    const headerLine = csv.split('\n')[0];
+
+    // Header must contain the tombstone-related columns
+    expect(headerLine).toContain('deletedEntryIds');
+    expect(headerLine).toContain('deletionReason');
+
+    // Data row must contain the actual values
+    expect(csv).toContain('compliance');
+    expect(csv).toContain('id1');
+    expect(csv).toContain('id2');
+  });
 });

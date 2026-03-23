@@ -453,6 +453,28 @@ describe('JsonlStorage', () => {
       const rotatedFiles = files.filter((f) => f.match(/audit\.jsonl\.\d+$/));
       expect(rotatedFiles).toHaveLength(0);
     });
+
+    it('should read rotated files in chronological order', async () => {
+      const storage = new JsonlStorage({
+        filePath,
+        maxFileSize: 50, // very small to force rotation on each entry
+        autoRotate: true,
+      });
+      await storage.init();
+
+      const entry1 = makeEntry({ id: 'e1', timestamp: '2025-01-01T00:00:00.000Z' });
+      const entry2 = makeEntry({ id: 'e2', timestamp: '2025-01-02T00:00:00.000Z' });
+      const entry3 = makeEntry({ id: 'e3', timestamp: '2025-01-03T00:00:00.000Z' });
+
+      await storage.append(entry1);
+      await storage.append(entry2);
+      await storage.append(entry3);
+
+      const all = await storage.query({});
+      // First entry should be the oldest, last should be the newest
+      expect(all[0].timestamp).toBe('2025-01-01T00:00:00.000Z');
+      expect(all[all.length - 1].timestamp).toBe('2025-01-03T00:00:00.000Z');
+    });
   });
 
   describe('CSV escaping', () => {

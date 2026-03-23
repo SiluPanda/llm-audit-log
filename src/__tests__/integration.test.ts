@@ -274,7 +274,7 @@ describe('Integration: export with filters', () => {
     const lines = csv.trim().split('\n');
 
     // Header
-    expect(lines[0]).toBe('id,v,timestamp,actor,model,provider,input,output,tokens_input,tokens_output,tokens_total,latencyMs,cost,toolCalls,error,metadata,piiFields,hmac,tombstone');
+    expect(lines[0]).toBe('id,v,timestamp,actor,model,provider,input,output,tokens_input,tokens_output,tokens_total,latencyMs,cost,toolCalls,error,metadata,piiFields,hmac,tombstone,deletedEntryIds,deletionReason');
 
     // Data
     expect(lines[1]).toContain('user:test');

@@ -170,7 +170,7 @@ export class JsonlStorage implements StorageBackend {
         .sort((a, b) => {
           const numA = parseInt(a.split('.').pop()!, 10);
           const numB = parseInt(b.split('.').pop()!, 10);
-          return numB - numA; // Higher numbers are older
+          return numA - numB; // Lower numbers are older
         });
 
       for (const file of rotatedFiles) {
@@ -275,7 +275,7 @@ export class JsonlStorage implements StorageBackend {
       'latencyMs', 'cost',
       'toolCalls', 'error',
       'metadata', 'piiFields',
-      'hmac', 'tombstone',
+      'hmac', 'tombstone', 'deletedEntryIds', 'deletionReason',
     ];
 
     const csvRows = [headers.join(',')];
@@ -301,6 +301,8 @@ export class JsonlStorage implements StorageBackend {
         csvEscape(JSON.stringify(entry.piiFields)),
         csvEscape(entry.hmac ?? ''),
         entry.tombstone ? 'true' : 'false',
+        csvEscape(entry.deletedEntryIds ? JSON.stringify(entry.deletedEntryIds) : ''),
+        csvEscape(entry.deletionReason ?? ''),
       ];
       csvRows.push(row.join(','));
     }
